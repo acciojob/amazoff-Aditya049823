@@ -21,11 +21,11 @@ public class OrderRepository {
 
     public void addOrder(Order order) {
         orderHashMap.put(order.getId(),order);
+        ordersNotAssigned.add(order.getId());
     }
 
     public void addPartner(String partnerId) {
-        DeliveryPartner deliveryPartner=new DeliveryPartner(partnerId);
-        deliveryPartnerHashMap.put(partnerId,deliveryPartner);
+        deliveryPartnerHashMap.put(partnerId,new DeliveryPartner(partnerId));
     }
 
     public void orderPartnerPair(String orderId, String partnerId) {
@@ -75,15 +75,7 @@ public class OrderRepository {
     }
 
     public Integer getOrderCountByPartnerId(String partnerId) {
-        int count=0;
-        for(String pid:deliveryPartnerHashMap.keySet())
-        {
-            if(pid.equals(partnerId))
-            {
-                count=deliveryPartnerHashMap.get(partnerId).getNumberOfOrders();
-            }
-        }
-        return count;
+        return orderPartnerMap.get(partnerId).size();
     }
 
     public List<String> orderByPartnerId(String partnerId) {
