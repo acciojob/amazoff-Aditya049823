@@ -7,8 +7,8 @@ import java.util.List;
 
 @Service
 public class OrderService {
-
-    OrderRepository orderRepository=new OrderRepository();
+    @Autowired
+    OrderRepository orderRepository;
 
     public void addOrder(Order order) {
         orderRepository.addOrder(order);
@@ -47,11 +47,25 @@ public class OrderService {
     }
 
     public Integer orderLeft(String time, String partnerId) {
-        return orderRepository.leftOrders(time,partnerId);
+        String timeleft[]=time.split(":");
+        int newtime=Integer.parseInt(timeleft[0])*60+Integer.parseInt(timeleft[1]);
+        return orderRepository.leftOrders(newtime,partnerId);
     }
 
     public String getDeliveryTime(String partnerId) {
-        return orderRepository.getDeliveryTime(partnerId);
+
+        int time=orderRepository.getDeliveryTime(partnerId);
+        String HH=String.valueOf(time/60);
+        String MM=String.valueOf(time%60);
+        if(HH.length()<2)
+        {
+            HH='0'+HH;
+        }
+        if(MM.length()<10)
+        {
+            MM='0'+MM;
+        }
+        return HH+':'+MM;
     }
 
     public void delete(String partnerId) {
